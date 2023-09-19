@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <script type="text/javascript">
+function updateCursor(id, size) {
+  document.getElementById(id).style =
+    "height: " +
+    size +
+    "px; width: " +
+    size +
+    "px;transform: scaleY(-1);";
+}
+
+function updatePointer() {
+  const sizes = [
+    32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 256
+  ];
+  var pointer = parseInt(document.getElementById("pointer").value);
+  if (pointer >= 1 && pointer <= sizes.length) {
+    var size = sizes[pointer - 1];
+    const COEFF = 1.0;
+    document.getElementById("expectedsize").value = size.toString();
+    updateCursor("expectedcursor", size);
+
+/*
+    document.getElementById("actualsize").value =
+        (Math.floor(size / window.devicePixelRatio)).toString();
+    updateCursor("actualcursor",
+          Math.floor(size / window.devicePixelRatio));
+*/
+
+
+    document.getElementById("actualsize").value =
+        (Math.ceil(size / 16 / window.devicePixelRatio) * 16).toString();
+    updateCursor("actualcursor",
+          Math.ceil(size / 16 / window.devicePixelRatio) * 16);
+
+
+        // COEFF * Math.max( Math.floor( Math.floor( Math.floor( size * window.devicePixelRatio ) / 16 ) / window.devicePixelRatio))) * 16
+//    document.getElementById("actualsize").value = 
+//      (COEFF * Math.max( 2, Math.floor( Math.floor( Math.floor( size * window.devicePixelRatio ) / 16 ) / window.devicePixelRatio)) * 16).toString();
+//    updateCursor("actualcursor",
+//      COEFF * Math.max( 2, Math.floor( Math.floor( Math.floor( size * window.devicePixelRatio ) / 16 ) / window.devicePixelRatio)) * 16);
+//    document.getElementById("actualsize").value = (size).toString();
+//    updateCursor("actualcursor", size);
+  }
+}
+
+function updateActualSize() {
+  var size = parseInt(document.getElementById("actualsize").value);
+  if (size >= 1 && size <= 512) {
+    updateCursor("actualcursor", size)
+  }
+}
+    </script>
+    <style>
+img {
+  border: 2px solid red;
+}
+</style>
+  </head>
+  <body onload="updatePointer()">
+    <p>
+      Mouse pointer size: <input id="pointer" type="text" value="1" onkeyup="updatePointer()" />
+      <br />
+      Expected cursor size in pixels: <input id="expectedsize" type="text" disabled="disabled" />
+      <br />
+<!--      <img id="expectedcursor" src="cursor96.png" /> -->
+      <img id="expectedcursor" src="arrow.svg" />
+      <br />
+      Actual size in pixels (fill by yourself): <input id="actualsize" type="text" onkeyup="updateActualSize()" />
+      <br />
+<!--      <img id="actualcursor" src="cursor96.png" /> -->
+      <img id="actualcursor" src="arrow.svg" />
+    </p>
+  </body>
+</html>
